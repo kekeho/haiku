@@ -11,6 +11,8 @@ services:
       - MYSQL_ROOT_PASSWORD=${DB_PASS}
     depends_on:
       - db
+    ports:
+      - 8000:8000
 
   caddy:
     build: caddy
