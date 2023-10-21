@@ -1,0 +1,32 @@
+version: "3"
+
+services:
+  haiku:
+    build: src
+
+  caddy:
+    build: caddy
+    environment:
+      - TZ=${TZ}
+      - HOSTNAME=${API_HOST}
+    ports:
+      - 80:80
+      - 443:443
+
+  db:
+    image: mysql/mysql-server
+    volumes:
+      - "db_store:/var/lib/mysql"
+      - "./db/mysql.cnf:/etc/mysql/conf.d/my.cnf"
+    environment:
+      - MYSQL_HOST=db
+      - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_PASS}
+      - MYSQL_ROOT_PASSWORD=${DB_PASS}
+      - TZ=${TZ}
+
+
+volumes:
+  db_store:
+    driver: "local"

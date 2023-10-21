@@ -1,0 +1,7 @@
+{$HOSTNAME} {
+	encode zstd gzip
+
+	route * {
+		reverse_proxy haiku:8000
+	}
+}
