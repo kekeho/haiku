@@ -2,11 +2,10 @@ import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker, relationship, declarative_base
 from contextlib import contextmanager
-from sqlalchemy import Column, String, ForeignKey
+from sqlalchemy import Column, String, ForeignKey, DateTime
 import bcrypt
 import uuid
 from typing import Tuple, Any, Optional
-import sys
 
 
 USER = os.environ.get('MYSQL_USER')
@@ -63,6 +62,7 @@ class User(Base):
     )
 
     tokens = relationship("SessionToken", backref="user")
+    posts = relationship("Post", backref="user")
 
     @classmethod
     def create(cls, username: str, display_name: str, raw_password: str):
@@ -148,11 +148,10 @@ class SessionToken(Base):
         )
 
 
-def create_table():
-    Base.metadata.create_all(bind=engine)
-
-
-if __name__ == "__main__":
-    funcname = sys.argv[1]
-    if funcname == "create_table":
-        create_table()
+class Post(Base):
+    __tablename__ = "post"
+    id = Column("id", String(UUID4_LENGTH), primary_key=True, nullable=False)
+    content = Column("content", String(50), nullable=False)
+    created_at = Column("created_at", DateTime, nullable=False)
+    user_id = Column(String(UUID4_LENGTH), ForeignKey('user.id'))
+    display_name = Column("display_name", String(NAME_LENGTH), nullable=True)

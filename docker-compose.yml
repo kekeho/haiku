@@ -3,6 +3,14 @@ version: "3"
 services:
   haiku:
     build: src
+    environment:
+      - MYSQL_HOST=db
+      - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_PASS}
+      - MYSQL_ROOT_PASSWORD=${DB_PASS}
+    depends_on:
+      - db
 
   caddy:
     build: caddy
@@ -12,6 +20,9 @@ services:
     ports:
       - 80:80
       - 443:443
+    depends_on:
+      - haiku
+      - db
 
   db:
     image: mysql/mysql-server
