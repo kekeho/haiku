@@ -6,6 +6,10 @@ name = "pypi"
 [packages]
 flask = "*"
 gunicorn = "*"
+sqlalchemy = "*"
+bcrypt = "*"
+pymysql = "*"
+cryptography = "*"
 
 [dev-packages]
 flake8 = "*"
